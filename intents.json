@@ -1,0 +1,293 @@
+import random
+import json
+import re
+from collections import defaultdict
+
+def augment_data_advanced(texts, labels, target_per_class=50):
+    """
+    Augmentation de données avancée pour atteindre 80%+ accuracy
+    """
+
+    # Regrouper par classe
+    by_class = defaultdict(list)
+    for text, label in zip(texts, labels):
+        by_class[label].append(text)
+
+    # Techniques d'augmentation
+    def synonym_replacement(text):
+        synonyms = {
+            "hello": ["hi", "hey", "greetings", "good morning", "good day"],
+            "enroll": ["register", "sign up", "join", "apply", "enter"],
+            "contact": ["reach", "communicate", "get in touch", "connect"],
+            "thank": ["appreciate", "grateful", "thanks", "much obliged"],
+            "course": ["program", "training", "class", "lesson", "curriculum"],
+            "certificate": ["certification", "credential", "diploma", "qualification"]
+        }
+
+        words = text.lower().split()
+        new_words = []
+
+        for word in words:
+            # Nettoyer la ponctuation
+            clean_word = re.sub(r'[^\w]', '', word)
+            if clean_word in synonyms and random.random() < 0.3:
+                new_words.append(random.choice(synonyms[clean_word]))
+            else:
+                new_words.append(word)
+
+        return " ".join(new_words)
+
+    def add_variations(text):
+        variations = []
+
+        # 1. Ajout de mots polis
+        polite_starters = ["Could you", "Can you", "Please", "I would like to", "Would you mind"]
+        polite_enders = ["please", "thank you", "thanks", "if possible"]
+
+        # 2. Questions vs affirmations
+        if "?" not in text:
+            variations.append(f"How can I {text.lower()}?")
+            variations.append(f"Can you help me with {text.lower()}?")
+
+        # 3. Formulations formelles/informelles
+        informal_text = text.replace("I would like", "I want").replace("Could you", "Can you")
+        formal_text = text.replace("I want", "I would like").replace("Can you", "Could you")
+
+        variations.extend([
+            f"{random.choice(polite_starters)} {text.lower()}",
+            f"{text} {random.choice(polite_enders)}",
+            informal_text,
+            formal_text
+        ])
+
+        # 4. Ajout de contexte
+        context_starters = [
+            "I'm new here, ",
+            "As a student, ",
+            "I'm interested in ",
+            "I need help with ",
+            "Quick question about "
+        ]
+
+        variations.append(f"{random.choice(context_starters)}{text.lower()}")
+
+        return variations
+
+    def generate_paraphrases(text, intent):
+        """Génère des paraphrases spécifiques par intent"""
+
+        paraphrases = []
+
+        if intent == "greeting":
+            templates = [
+                "Good {time}", "Hello there", "Hi everyone", "{greeting} to you",
+                "Greetings from me", "Hope you're doing well", "Nice to meet you"
+            ]
+            times = ["morning", "afternoon", "evening", "day"]
+            greetings = ["hello", "hi", "hey", "greetings"]
+
+            for template in templates:
+                if "{time}" in template:
+                    paraphrases.extend([template.format(time=t) for t in times])
+                elif "{greeting}" in template:
+                    paraphrases.extend([template.format(greeting=g) for g in greetings])
+                else:
+                    paraphrases.append(template)
+
+        elif intent == "enroll":
+            templates = [
+                "How do I {action}?",
+                "I want to {action}",
+                "Can I {action} today?",
+                "What's the process to {action}?",
+                "Steps to {action}",
+                "I'm ready to {action}",
+                "{action} procedure"
+            ]
+            actions = ["enroll", "register", "sign up", "join your program", "become a student", "apply"]
+
+            for template in templates:
+                paraphrases.extend([template.format(action=a) for a in actions])
+
+        elif intent == "contact":
+            templates = [
+                "How can I {action} you?",
+                "What's your {info}?",
+                "I need your {info}",
+                "Can you share your {info}?",
+                "Where can I {action} you?",
+                "{info} please"
+            ]
+            actions = ["contact", "reach", "call", "email", "find"]
+            infos = ["phone number", "email", "address", "contact info", "details"]
+
+            for template in templates:
+                if "{action}" in template:
+                    paraphrases.extend([template.format(action=a) for a in actions])
+                elif "{info}" in template:
+                    paraphrases.extend([template.format(info=i) for i in infos])
+
+        elif intent == "thanks":
+            templates = [
+                "{thanks} so much",
+                "{thanks} for your help",
+                "I really {appreciate} it",
+                "{thanks} for the information",
+                "Much {appreciated}",
+                "I {appreciate} your assistance"
+            ]
+            thanks = ["Thank you", "Thanks", "Thank you very much"]
+            appreciates = ["appreciate", "value", "am grateful for"]
+            appreciateds = ["appreciated", "obliged", "grateful"]
+
+            for template in templates:
+                if "{thanks}" in template:
+                    paraphrases.extend([template.format(thanks=t) for t in thanks])
+                elif "{appreciate}" in template:
+                    paraphrases.extend([template.format(appreciate=a) for a in appreciates])
+                elif "{appreciated}" in template:
+                    paraphrases.extend([template.format(appreciated=a) for a in appreciateds])
+
+        elif intent == "certifications":
+            templates = [
+                "What {certs} do you offer?",
+                "Do you provide {certs}?",
+                "Can I get {certified}?",
+                "Tell me about your {certs}",
+                "Information about {certs}",
+                "Are your {certs} recognized?",
+                "{cert} details please"
+            ]
+            certs = ["certificates", "certifications", "credentials", "qualifications"]
+            certified = ["certified", "a certificate", "certification", "credentials"]
+            cert = ["Certificate", "Certification", "Credential"]
+
+            for template in templates:
+                if "{certs}" in template:
+                    paraphrases.extend([template.format(certs=c) for c in certs])
+                elif "{certified}" in template:
+                    paraphrases.extend([template.format(certified=c) for c in certified])
+                elif "{cert}" in template:
+                    paraphrases.extend([template.format(cert=c) for c in cert])
+
+        elif intent == "course_info":
+            templates = [
+                "What {courses} do you have?",
+                "Tell me about your {programs}",
+                "Available {courses}?",
+                "I want to know about your {programs}",
+                "Course {info}",
+                "What can I {learn}?",
+                "Training {options}"
+            ]
+            courses = ["courses", "classes", "lessons", "training"]
+            programs = ["programs", "curriculum", "offerings", "modules"]
+            info = ["information", "details", "catalog", "list"]
+            learn = ["learn", "study", "train in", "master"]
+            options = ["options", "available", "choices", "programs"]
+
+            for template in templates:
+                if "{courses}" in template:
+                    paraphrases.extend([template.format(courses=c) for c in courses])
+                elif "{programs}" in template:
+                    paraphrases.extend([template.format(programs=p) for p in programs])
+                elif "{info}" in template:
+                    paraphrases.extend([template.format(info=i) for i in info])
+                elif "{learn}" in template:
+                    paraphrases.extend([template.format(learn=l) for l in learn])
+                elif "{options}" in template:
+                    paraphrases.extend([template.format(options=o) for o in options])
+
+        return paraphrases
+
+    # Augmenter chaque classe
+    augmented_texts = []
+    augmented_labels = []
+
+    for intent, examples in by_class.items():
+        print(f"🔄 Augmentation de '{intent}': {len(examples)} -> ", end="")
+
+        current_texts = examples.copy()
+        current_labels = [intent] * len(examples)
+
+        # Tant qu'on n'a pas assez d'exemples
+        while len(current_texts) < target_per_class:
+            for original_text in examples:
+                if len(current_texts) >= target_per_class:
+                    break
+
+                # Appliquer différentes techniques
+                techniques = [
+                    synonym_replacement(original_text),
+                    *add_variations(original_text),
+                    *generate_paraphrases(original_text, intent)
+                ]
+
+                # Ajouter les variations uniques
+                for variant in techniques:
+                    if variant and variant.strip() and variant not in current_texts:
+                        current_texts.append(variant.strip())
+                        current_labels.append(intent)
+
+                        if len(current_texts) >= target_per_class:
+                            break
+
+        # Limiter au nombre cible
+        current_texts = current_texts[:target_per_class]
+        current_labels = current_labels[:target_per_class]
+
+        print(f"{len(current_texts)} exemples")
+
+        augmented_texts.extend(current_texts)
+        augmented_labels.extend(current_labels)
+
+    return augmented_texts, augmented_labels
+
+
+def create_mega_dataset():
+    """
+    Crée un MEGA dataset avec 50+ exemples par classe
+    """
+
+    # Dataset de base
+    base_data = {
+        "greeting": [
+            "Hello", "Hi", "Hey", "Good morning", "Good afternoon", "Bonjour", "Salut"
+        ],
+        "enroll": [
+            "How can I enroll?", "I want to sign up", "Registration", "How to register?"
+        ],
+        "contact": [
+            "Contact information", "Phone number", "How to contact you?", "Your address"
+        ],
+        "thanks": [
+            "Thank you", "Thanks", "Thanks a lot", "Thank you very much"
+        ],
+        "certifications": [
+            "What certificates?", "Do you provide certificates?", "Certification info"
+        ],
+        "course_info": [
+            "Course information", "What courses?", "Available programs", "Training details"
+        ]
+    }
+
+    # Convertir en listes
+    texts = []
+    labels = []
+
+    for intent, examples in base_data.items():
+        texts.extend(examples)
+        labels.extend([intent] * len(examples))
+
+    # Augmentation MASSIVE
+    print("🚀 AUGMENTATION MASSIVE DES DONNÉES...")
+    augmented_texts, augmented_labels = augment_data_advanced(texts, labels, target_per_class=60)
+
+    # Sauvegarder
+    mega_dataset = [
+        {"text": text, "intent": label}
+        for text, label in zip(augmented_texts, augmented_labels)
+    ]
+
+    with open("mega_intents_dataset.json", "w", encoding="utf-8") as f:
+        json.dump(mega_dataset
