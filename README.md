@@ -135,13 +135,11 @@ bi-geek-chatbot/
 
 📝 Logging
 Logs are saved in chatbot.log (max 1MB, 5 backups) for easy debugging. 🕵️‍♂️
-🤝 Contributing
 
+🤝 Contributing
 Fork the repo 🍴
 Create a branch (git checkout -b feature/your-feature)
 Commit changes (git commit -m "Add your feature")
 Push the branch (git push origin feature/your-feature)
 Open a Pull Request 🚀
 
-📜 License
-This project is licensed under the MIT License. Free as a bird
