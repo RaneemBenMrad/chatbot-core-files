@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BI-GEEK - Business Intelligence Academy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #6A1B9A;
+      --secondary-color: #1E2A44;
+      --accent-color: #EDE7F6;
+      --dark-color: #0A1428;
+      --light-color: #FFFFFF;
+      --success-color: #28A745;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light-color);
+      color: var(--secondary-color);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: var(--light-color);
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      transition: background 0.3s ease;
+    }
+
+    .navbar.scrolled {
+      background: var(--primary-color);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar.scrolled .navbar-brand,
+    .navbar.scrolled .nav-link {
+      color: var(--light-color);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.9rem;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--secondary-color);
+      font-weight: 500;
+      font-size: 1.1rem;
+      padding: 0.5rem 1.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--primary-color);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(45deg, var(--primary-color) 0%, #F06292 100%);
+      color: var(--light-color);
+      padding: 10rem 0 4rem;
+      position: relative;
+      text-align: center;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1614850715649-1d0106292a9e') center/cover no-repeat;
+      opacity: 0.2;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-section h1 {
+      font-size: 3.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-section p {
+      font-size: 1.3rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+
+    .hero-course-card {
+      background: var(--light-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      transition: transform 0.4s ease;
+    }
+
+    .hero-course-card:hover {
+      transform: translateY(-10px);
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: var(--primary-color);
+      border: none;
+      border-radius: 10px;
+      padding: 1rem 2.5rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--light-color);
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: #B0004D;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Services Section */
+    .services-section {
+      background: var(--accent-color);
+      padding: 6rem 0;
+      position: relative;
+      transform: skewY(-3deg);
+    }
+
+    .services-section .container {
+      transform: skewY(3deg);
+    }
+
+    .service-card {
+      background: var(--light-color);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .service-card img {
+      height: 160px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .service-card:hover img {
+      transform: scale(1.05);
+    }
+
+    /* Testimonial Slider */
+    .testimonial-slider {
+      padding: 5rem 0;
+    }
+
+    .testimonial-card {
+      background: var(--light-color);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .testimonial-card .quote {
+      font-size: 1.2rem;
+      color: var(--secondary-color);
+      margin-bottom: 1rem;
+    }
+
+    /* Impact Section */
+    .impact-section {
+      background: var(--primary-color);
+      color: var(--light-color);
+      padding: 6rem 0;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* CTA Banner */
+    .cta-banner {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary-color);
+      color: var(--light-color);
+      padding: 1.5rem 3rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      z-index: 999;
+      display: none;
+    }
+
+    /* Chatbot Styles */
+    .chatbot-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--light-color);
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      z-index: 1001;
+      transition: all 0.3s ease;
+    }
+
+    .chatbot-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .chatbot-container {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 350px;
+      height: 500px;
+      background: var(--light-color);
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      display: none;
+      flex-direction: column;
+      z-index: 1002;
+      overflow: hidden;
+    }
+
+    .chatbot-header {
+      background: var(--primary-color);
+      color: var(--light-color);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .chatbot-header i {
+      cursor: pointer;
+    }
+
+    .chatbot-body {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: var(--accent-color);
+    }
+
+    .chatbot-message {
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      border-radius: 18px;
+      max-width: 80%;
+      word-wrap: break-word;
+      position: relative;
+    }
+
+    .chatbot-message.user {
+      background: var(--primary-color);
+      color: var(--light-color);
+      margin-left: auto;
+      border-bottom-right-radius: 5px;
+    }
+
+    .chatbot-message.bot {
+      background: var(--light-color);
+      color: var(--secondary-color);
+      border: 1px solid #e1e5e9;
+      border-bottom-left-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .chatbot-input {
+      padding: 15px 20px;
+      background: var(--light-color);
+      border-top: 1px solid #e1e5e9;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .chatbot-input input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 10px 15px;
+      outline: none;
+    }
+
+    .chatbot-input input:focus {
+      border-color: var(--primary-color);
+    }
+
+    .voice-btn {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #B0004D 0%, #F06292 100%);
+      border: none;
+      border-radius: 50%;
+      color: var(--light-color);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .voice-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 15px rgba(176, 0, 77, 0.4);
+    }
+
+    .voice-btn.recording {
+      background: linear-gradient(135deg, #800036 0%, #C2185B 100%);
+      animation: pulse 1.5s infinite;
+    }
+
+    .voice-btn.processing {
+      background: linear-gradient(135deg, #F06292 0%, #B0004D 100%);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .wave-bars {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .wave-bar {
+      width: 2px;
+      height: 15px;
+      background: var(--light-color);
+      border-radius: 1px;
+      animation: wave 1.5s infinite ease-in-out;
+    }
+
+    .wave-bar:nth-child(2) { animation-delay: -1.2s; }
+    .wave-bar:nth-child(3) { animation-delay: -1.0s; }
+    .wave-bar:nth-child(4) { animation-delay: -0.8s; }
+
+    @keyframes wave {
+      0%, 40%, 100% { transform: scaleY(0.4); }
+      20% { transform: scaleY(1.0); }
+    }
+
+    .status-indicator {
+      padding: 8px 15px;
+      background: var(--accent-color);
+      border-radius: 15px;
+      font-size: 12px;
+      color: var(--secondary-color);
+      text-align: center;
+      margin-bottom: 10px;
+      display: none;
+    }
+
+    .status-indicator.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .status-indicator.error {
+      background: #ffebee;
+      color: #d32f2f;
+    }
+
+    .status-indicator.success {
+      background: #e8f5e8;
+      color: #2e7d32;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark-color);
+      color: #A1A1AA;
+      padding: 4rem 0;
+    }
+
+    footer h5 {
+      color: var(--light-color);
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+    }
+
+    footer a {
+      color: #A1A1AA;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: var(--primary-color);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 992px) {
+      .hero-section h1 { font-size: 2.5rem; }
+      .hero-section p { font-size: 1.1rem; }
+      .chatbot-container { width: 300px; }
+    }
+
+    @media (max-width: 768px) {
+      .chatbot-container { width: 90%; height: 70vh; bottom: 90px; right: 5%; }
+      .chatbot-btn { bottom: 20px; right: 20px; width: 50px; height: 50px; }
+    }
+
+    @media (max-width: 576px) {
+      .hero-section { padding: 6rem 0 3rem; }
+      .hero-section h1 { font-size: 2rem; }
+      .hero-section p { font-size: 1rem; }
+      .btn-primary { padding: 0.8rem 2rem; font-size: 0.95rem; }
+      .stat-number { font-size: 2.2rem; }
+      .chatbot-container { width: 90%; right: 5%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#"><i class="fas fa-laptop-code me-2"></i>BI-GEEK</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item"><a class="nav-link" href="#">Courses</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Certifications</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Bootcamps</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+          <li class="nav-item">
+            <a class="btn btn-primary ms-3" href="#">Join Now</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero-section">
+    <div class="container hero-content">
+      <h1 class="animate-hero-title">Unleash Your Data Potential</h1>
+      <p class="animate-hero-text">Transform your career with BI-GEEK’s expert-led Business Intelligence training.</p>
+      <div class="row g-3 mt-4">
+        <div class="col-md-4">
+          <div class="hero-course-card text-center">
+            <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485" class="img-fluid rounded-3 mb-3" alt="Power BI" style="height: 120px;">
+            <h5 class="fw-bold">Power BI Masterclass</h5>
+            <p class="text-muted small">Learn advanced data visualization techniques.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="hero-course-card text-center">
+            <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f" class="img-fluid rounded-3 mb-3" alt="Data Engineering" style="height: 120px;">
+            <h5 class="fw-bold">Data Engineering</h5>
+            <p class="text-muted small">Master Big Data and cloud platforms.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="hero-course-card text-center">
+            <img src="https://images.unsplash.com/photo-1516321318423-ffd3db47e5f5" class="img-fluid rounded-3 mb-3" alt="Certifications" style="height: 120px;">
+            <h5 class="fw-bold">Microsoft Certifications</h5>
+            <p class="text-muted small">Earn industry-recognized credentials.</p>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="#" class="btn btn-primary">Discover All Courses</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="services-section">
+    <div class="container">
+      <h2 class="text-center mb-5 fw-bold">Why Choose BI-GEEK?</h2>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="service-card p-4 d-flex align-items-center">
+            <div class="feature-icon me-3"><i class="fas fa-chart-line"></i></div>
+            <div>
+              <h5 class="fw-bold">Hands-On Learning</h5>
+              <p class="text-muted">Practical projects to build real-world skills.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="service-card p-4 d-flex align-items-center">
+            <div class="feature-icon me-3"><i class="fas fa-certificate"></i></div>
+            <div>
+              <h5 class="fw-bold">Certified Instructors</h5>
+              <p class="text-muted">Learn from industry experts.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="service-card p-4 d-flex align-items-center">
+            <div class="feature-icon me-3"><i class="fas fa-rocket"></i></div>
+            <div>
+              <h5 class="fw-bold">Career Support</h5>
+              <p class="text-muted">Job placement and resume guidance.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="service-card p-4 d-flex align-items-center">
+            <div class="feature-icon me-3"><i class="fas fa-globe"></i></div>
+            <div>
+              <h5 class="fw-bold">Flexible Learning</h5>
+              <p class="text-muted">Online and in-person options.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial Slider -->
+  <section class="testimonial-slider">
+    <div class="container">
+      <h2 class="text-center mb-5 fw-bold">Hear From Our Graduates</h2>
+      <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="testimonial-card text-center">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Ahmed" class="rounded-circle mb-3" style="width: 80px; height: 80px;">
+              <p class="quote">"BI-GEEK turned my passion for data into a thriving career!"</p>
+              <h5 class="fw-bold">Ahmed, 2024</h5>
+              <p class="text-muted small">Data Analyst</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="testimonial-card text-center">
+              <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah" class="rounded-circle mb-3" style="width: 80px; height: 80px;">
+              <p class="quote">"The bootcamp was intense but worth every second!"</p>
+              <h5 class="fw-bold">Sarah, 2023</h5>
+              <p class="text-muted small">Data Engineer</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Impact Section -->
+  <section class="impact-section">
+    <div class="container">
+      <h2 class="text-center mb-5 fw-bold">Our Impact</h2>
+      <div class="row g-4 text-center">
+        <div class="col-md-3">
+          <div class="feature-icon"><i class="fas fa-users"></i></div>
+          <div class="stat-number">1200</div>
+          <p>Students Trained</p>
+        </div>
+        <div class="col-md-3">
+          <div class="feature-icon"><i class="fas fa-certificate"></i></div>
+          <div class="stat-number">800</div>
+          <p>Certifications Awarded</p>
+        </div>
+        <div class="col-md-3">
+          <div class="feature-icon"><i class="fas fa-briefcase"></i></div>
+          <div class="stat-number">90</div>
+          <p>Employability Rate (%)</p>
+        </div>
+        <div class="col-md-3">
+          <div class="feature-icon"><i class="fas fa-star"></i></div>
+          <div class="stat-number">4.8/5</div>
+          <p>Satisfaction</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- News Section -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-5 fw-bold">Latest Updates</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="service-card">
+            <img src="https://images.unsplash.com/photo-1531497865144-0464ef8fb9a9" class="card-img-top" alt="New Bootcamp">
+            <div class="card-body">
+              <span class="badge">New</span>
+              <h5 class="fw-bold mt-3">2025 Bootcamp Launch</h5>
+              <p class="text-muted">Join our advanced Data Engineering program.</p>
+              <a href="#" class="btn btn-primary btn-sm">Explore Now</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-card">
+            <img src="https://images.unsplash.com/photo-1507208773393-40d9fc670acf" class="card-img-top" alt="Webinar">
+            <div class="card-body">
+              <span class="badge bg-success">Event</span>
+              <h5 class="fw-bold mt-3">Power BI Webinar</h5>
+              <p class="text-muted">Free session with industry experts.</p>
+              <a href="#" class="btn btn-primary btn-sm">Register</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-card">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c" class="card-img-top" alt="Success Story">
+            <div class="card-body">
+              <span class="badge">Story</span>
+              <h5 class="fw-bold mt-3">Student Spotlight</h5>
+              <p class="text-muted">Ahmed’s journey to BI mastery.</p>
+              <a href="#" class="btn btn-primary btn-sm">Read More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <div class="cta-banner">
+    <h5 class="mb-2 fw-bold">Ready to Transform Your Career?</h5>
+    <a href="#" class="btn btn-light btn-sm">Enroll Today</a>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-md-4">
+          <h5>BI-GEEK</h5>
+          <p>Your gateway to mastering Business Intelligence and Big Data.</p>
+        </div>
+        <div class="col-md-2">
+          <h5>Courses</h5>
+          <ul class="list-unstyled">
+            <li><a href="#">Power BI</a></li>
+            <li><a href="#">Python</a></li>
+            <li><a href="#">Big Data</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h5>Certifications</h5>
+          <ul class="list-unstyled">
+            <li><a href="#">PL-300</a></li>
+            <li><a href="#">DP-900</a></li>
+            <li><a href="#">DP-203</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h5>Contact</h5>
+          <ul class="list-unstyled">
+            <li><a href="#">contact@bi-geek.net</a></li>
+            <li><a href="#">+216 58 611 283</a></li>
+            <li><a href="#">Lac 1, Tunis</a></li>
+          </ul>
+        </div>
+        <div class="col-md-2">
+          <h5>Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="#">Enroll</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center pt-5">
+        <small>© 2025 BI-GEEK. All rights reserved.</small>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Chatbot Button and Container -->
+  <div class="chatbot-btn" id="chatbotToggle">
+    <i class="fas fa-comment-medical"></i>
+  </div>
+
+  <div class="chatbot-container" id="chatbotContainer">
+    <div class="chatbot-header">
+      <span> 🤖 BI-GEEK Assistant</span>
+      <i class="fas fa-times" id="chatbotClose"></i>
+    </div>
+
+    <div class="status-indicator" id="statusIndicator"></div>
+
+    <div class="chatbot-body" id="chatbotBody">
+      <div class="chatbot-message bot">
+        Welcome to BI-GEEK! I can help you with information about our courses, enrollment, contact details, and more. You can type your message or use the voice button to speak to me! 🎤
+      </div>
+    </div>
+
+    <div class="chatbot-input">
+      <input type="text" id="chatbotInput" placeholder="Type your message or use voice...">
+      <button class="voice-btn" id="voiceBtn" title="Click and hold to record"><i class="fas fa-microphone"></i></button>
+      <button id="chatbotSend"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // CTA banner scroll effect
+    window.addEventListener('scroll', () => {
+      const ctaBanner = document.querySelector('.cta-banner');
+      if (window.scrollY > 500) {
+        ctaBanner.style.display = 'block';
+      } else {
+        ctaBanner.style.display = 'none';
+      }
+    });
+
+    // Chatbot with Voice Support
+    class VoiceChatbot {
+      constructor() {
+        this.chatbotToggle = document.getElementById('chatbotToggle');
+        this.chatbotContainer = document.getElementById('chatbotContainer');
+        this.chatbotClose = document.getElementById('chatbotClose');
+        this.chatbotSend = document.getElementById('chatbotSend');
+        this.chatbotInput = document.getElementById('chatbotInput');
+        this.chatbotBody = document.getElementById('chatbotBody');
+        this.voiceBtn = document.getElementById('voiceBtn');
+        this.statusIndicator = document.getElementById('statusIndicator');
+
+        this.mediaRecorder = null;
+        this.audioChunks = [];
+        this.isRecording = false;
+        this.isProcessing = false;
+        this.isSending = false;
+
+        this.initializeEventListeners();
+        this.checkVoiceSupport();
+        this.chatbotContainer.style.display = 'none';
+      }
+
+      initializeEventListeners() {
+        this.chatbotToggle.addEventListener('click', () => this.toggleChatbot());
+        this.chatbotClose.addEventListener('click', () => this.closeChatbot());
+
+        this.chatbotSend.addEventListener('click', () => this.sendTextMessage());
+        this.chatbotInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && !this.isSending) this.sendTextMessage();
+        });
+
+        this.voiceBtn.addEventListener('mousedown', () => this.startRecording());
+        this.voiceBtn.addEventListener('mouseup', () => this.stopRecording());
+        this.voiceBtn.addEventListener('mouseleave', () => this.stopRecording());
+
+        this.voiceBtn.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          this.startRecording();
+        });
+        this.voiceBtn.addEventListener('touchend', (e) => {
+          e.preventDefault();
+          this.stopRecording();
+        });
+      }
+
+      toggleChatbot() {
+        const isHidden = this.chatbotContainer.style.display === 'none';
+        this.chatbotContainer.style.display = isHidden ? 'flex' : 'none';
+      }
+
+      closeChatbot() {
+        this.chatbotContainer.style.display = 'none';
+      }
+
+      showStatus(message, type = 'info') {
+        this.statusIndicator.textContent = message;
+        this.statusIndicator.className = `status-indicator show ${type}`;
+        setTimeout(() => this.statusIndicator.classList.remove('show'), 3000);
+      }
+
+      addMessage(content, isUser = false, isVoice = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chatbot-message ${isUser ? 'user' : 'bot'} ${isVoice ? 'voice-message' : ''}`;
+        messageDiv.textContent = content;
+
+        if (isVoice && isUser) {
+          const voiceIndicator = document.createElement('div');
+          voiceIndicator.className = 'voice-indicator';
+          voiceIndicator.textContent = '🎤';
+          voiceIndicator.title = 'Voice message';
+          messageDiv.appendChild(voiceIndicator);
+        }
+
+        this.chatbotBody.appendChild(messageDiv);
+        this.chatbotBody.scrollTop = this.chatbotBody.scrollHeight;
+
+        if (!isUser && 'speechSynthesis' in window) {
+          this.speak(content);
+        }
+      }
+
+      speak(text) {
+        if ('speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.rate = 0.9;
+          utterance.pitch = 1;
+          utterance.volume = 0.8;
+          utterance.lang = this.detectLanguage(text);
+          speechSynthesis.speak(utterance);
+        }
+      }
+
+      detectLanguage(text) {
+        const arabicPattern = /[\u0600-\u06FF]/;
+        const frenchWords = ['le', 'la', 'les', 'de', 'du', 'des', 'et', 'à', 'pour', 'avec', 'cours', 'formation'];
+        if (arabicPattern.test(text)) return 'ar-EG';
+        if (frenchWords.some(word => text.toLowerCase().includes(word))) return 'fr-FR';
+        return 'en-US';
+      }
+
+      async checkVoiceSupport() {
+        if (!navigator.mediaDevices || !window.MediaRecorder) {
+          this.showStatus('Voice recording not supported.', 'error');
+          this.voiceBtn.style.display = 'none';
+          return;
+        }
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          stream.getTracks().forEach(track => track.stop());
+          this.showStatus('Voice input ready!', 'success');
+        } catch (error) {
+          this.showStatus('Microphone access denied. Please allow microphone access.', 'error');
+          this.voiceBtn.style.display = 'none';
+          console.error('Microphone error:', error);
+        }
+      }
+
+      async startRecording() {
+        if (this.isRecording || this.isProcessing) return;
+
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          this.mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' }); // Utiliser Opus pour WebM
+          this.audioChunks = [];
+
+          this.mediaRecorder.ondataavailable = (e) => {
+            if (e.data.size > 0) this.audioChunks.push(e.data);
+          };
+
+          this.mediaRecorder.onstop = () => this.processRecording();
+
+          this.mediaRecorder.start(100); // Chunks de 100ms
+          this.isRecording = true;
+          this.voiceBtn.classList.add('recording');
+          this.showStatus('Recording...', 'info');
+
+          const waveBars = document.createElement('div');
+          waveBars.className = 'wave-bars';
+          for (let i = 0; i < 4; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'wave-bar';
+            waveBars.appendChild(bar);
+          }
+          this.voiceBtn.innerHTML = '';
+          this.voiceBtn.appendChild(waveBars);
+        } catch (error) {
+          this.showStatus('Failed to start recording. Check microphone permissions.', 'error');
+          console.error('Recording error:', error);
+          this.stopRecording();
+        }
+      }
+
+      async stopRecording() {
+        if (!this.isRecording) return;
+
+        this.mediaRecorder.stop();
+        const tracks = this.mediaRecorder.stream.getTracks();
+        tracks.forEach(track => track.stop());
+        this.isRecording = false;
+        this.voiceBtn.classList.remove('recording');
+        this.voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+        this.showStatus('Processing audio...', 'info');
+      }
+
+      async processRecording() {
+        this.isProcessing = true;
+        this.voiceBtn.classList.add('processing');
+
+        const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+        const reader = new FileReader();
+        reader.readAsDataURL(audioBlob);
+        reader.onloadend = async () => {
+          const base64Audio = reader.result;
+          try {
+            const response = await fetch('http://127.0.0.1:5001/voice/chat', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ audio: base64Audio, format: 'webm' })
+            });
+
+            if (!response.ok) throw new Error(`Voice chat failed with status ${response.status}`);
+
+            const data = await response.json();
+            if (data.error) throw new Error(data.error);
+
+            this.addMessage(data.transcription, true, true);
+            this.addMessage(data.response, false);
+
+          } catch (error) {
+            this.showStatus(`Error processing voice: ${error.message}`, 'error');
+            console.error('Voice processing error:', error);
+          } finally {
+            this.isProcessing = false;
+            this.voiceBtn.classList.remove('processing');
+            this.voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+          }
+        };
+      }
+
+      async sendTextMessage() {
+        if (this.isSending) return;
+        const message = this.chatbotInput.value.trim();
+        if (!message) return;
+
+        this.isSending = true;
+        this.chatbotSend.disabled = true;
+        this.chatbotInput.disabled = true;
+
+        this.addMessage(message, true);
+        this.chatbotInput.value = '';
+
+        try {
+          const response = await fetch('http://127.0.0.1:5001/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message })
+          });
+
+          if (!response.ok) throw new Error('Chat failed');
+
+          const data = await response.json();
+          this.addMessage(data.response, false);
+
+        } catch (error) {
+          this.addMessage('Server error. Try again.', false);
+          console.error('Chat error:', error);
+        } finally {
+          this.isSending = false;
+          this.chatbotSend.disabled = false;
+          this.chatbotInput.disabled = false;
+          this.chatbotInput.focus();
+        }
+      }
+    }
+
+    const chatbot = new VoiceChatbot();
+  </script>
+</body>
+</html>
