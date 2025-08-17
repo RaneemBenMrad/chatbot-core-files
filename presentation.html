@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BI-GEEK Chatbot - Data Science Architecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6B46C1 0%, #9333EA 50%, #A855F7 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 4em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #FBBF24, #F59E0B, #D97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.4em;
+            opacity: 0.95;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.98);
+            margin-bottom: 30px;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(107, 70, 193, 0.2);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(168, 85, 247, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #6B46C1, #9333EA, #A855F7);
+            border-radius: 25px 25px 0 0;
+        }
+
+        .section:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 35px 70px rgba(107, 70, 193, 0.3);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 35px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #9333EA;
+        }
+
+        .section-icon {
+            background: linear-gradient(45deg, #6B46C1, #9333EA);
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            margin-right: 25px;
+            box-shadow: 0 10px 25px rgba(107, 70, 193, 0.4);
+            position: relative;
+        }
+
+        .section-icon::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #FBBF24, #F59E0B, #6B46C1, #9333EA);
+            border-radius: 22px;
+            z-index: -1;
+        }
+
+        .section-title {
+            font-size: 2.6em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #6B46C1, #9333EA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .workflow-diagram {
+            background: linear-gradient(135deg, #F8FAFC 0%, #E5E7EB 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+            position: relative;
+            border: 2px solid #9333EA;
+        }
+
+        .workflow-title {
+            text-align: center;
+            font-size: 2.2em;
+            color: #6B46C1;
+            margin-bottom: 40px;
+            font-weight: bold;
+        }
+
+        .workflow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .workflow-step {
+            background: white;
+            padding: 25px 35px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(107, 70, 193, 0.1);
+            border: 2px solid #E5E7EB;
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .workflow-step:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(107, 70, 193, 0.2);
+            border-color: #9333EA;
+        }
+
+        .workflow-step::after {
+            content: '↓';
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5em;
+            color: #9333EA;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .workflow-step:last-child::after {
+            display: none;
+        }
+
+        .workflow-step-number {
+            background: linear-gradient(45deg, #6B46C1, #9333EA);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.1em;
+        }
+
+        .workflow-step-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #6B46C1;
+            margin-bottom: 8px;
+        }
+
+        .workflow-step-desc {
+            color: #6B7280;
+            font-size: 1em;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(107, 70, 193, 0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #6B46C1, #9333EA);
+            color: white;
+            padding: 25px 20px;
+            text-align: left;
+            font-size: 1.2em;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .comparison-table td {
+            padding: 20px;
+            border-bottom: 1px solid #E5E7EB;
+            vertical-align: top;
+            transition: all 0.2s ease;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: #F8FAFC;
+        }
+
+        .comparison-table tr:hover {
+            background: linear-gradient(90deg, #F3E8FF, #EDE9FE);
+            transform: scale(1.02);
+        }
+
+        .metrics-section {
+            background: linear-gradient(135deg, #6B46C1 0%, #9333EA 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+
+        .metrics-title {
+            font-size: 2.2em;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 35px;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .metric-card:hover::before {
+            animation: shine 0.5s;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .metric-value {
+            font-size: 3.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .metric-label {
+            font-size: 1.2em;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .classification-report {
+            background: #1F2937;
+            color: #E5E7EB;
+            padding: 30px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 25px 0;
+            position: relative;
+            border: 2px solid #9333EA;
+        }
+
+        .classification-report::before {
+            content: 'Classification Report';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: #9333EA;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, #F3E8FF, #E9D5FF);
+            border-left: 6px solid #9333EA;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(107, 70, 193, 0.1);
+        }
+
+        .formula-box h4 {
+            color: #6B46C1;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .formula {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #D1D5DB;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 25px 0;
+        }
+
+        .pros, .cons {
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .pros {
+            background: linear-gradient(135deg, #DCFCE7, #BBF7D0);
+            border-left: 6px solid #10B981;
+        }
+
+        .cons {
+            background: linear-gradient(135deg, #FEE2E2, #FECACA);
+            border-left: 6px solid #EF4444;
+        }
+
+        .pros h4, .cons h4 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .pros ul, .cons ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .pros li {
+            margin: 12px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .pros li:before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+        }
+
+        .cons li {
+            margin: 12px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .cons li:before {
+            content: "⚠️";
+            position: absolute;
+            left: 0;
+            font-size: 1.2em;
+        }
+
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .tech-item {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 6px solid #9333EA;
+            box-shadow: 0 10px 25px rgba(107, 70, 193, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6B46C1, #9333EA, #A855F7);
+        }
+
+        .tech-item:hover {
+            transform: translateX(10px) translateY(-5px);
+            box-shadow: 0 20px 40px rgba(107, 70, 193, 0.2);
+        }
+
+        .tech-item h4 {
+            color: #6B46C1;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .code-block {
+            background: #0F172A;
+            color: #E2E8F0;
+            padding: 30px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            overflow-x: auto;
+            margin: 25px 0;
+            position: relative;
+            border: 2px solid #9333EA;
+            box-shadow: 0 10px 25px rgba(107, 70, 193, 0.2);
+        }
+
+        .code-block::before {
+            content: 'Python Implementation';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: linear-gradient(45deg, #6B46C1, #9333EA);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-container {
+                flex-direction: column;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+            }
+
+            .section-title {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 BI-GEEK Chatbot</h1>
+            <p>Multilingual AI with Voice Input for BI-GEEK Academy 🎙️</p>
+        </div>
+
+        <!-- SECTION 1: Hugging Face -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">🤗</div>
+                <div class="section-title">1. Hugging Face - Intent Classification</div>
+            </div>
+
+            <h3 style="color: #6B46C1; margin-bottom: 20px;">🎯 Why Hugging Face?</h3>
+            <p>Our chatbot now supports voice input, enhancing user interaction! The Hugging Face model has been fine-tuned for better performance, with updated metrics reflecting improved intent classification accuracy. 📈</p>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>✅ Advantages</h4>
+                    <ul>
+                        <li>Mature and robust ecosystem</li>
+                        <li>1000+ pre-trained models</li>
+                        <li>Native multilingual support</li>
+                        <li>Simplified training pipeline</li>
+                        <li>Active community and support</li>
+                        <li>Easy PyTorch/TensorFlow integration</li>
+                        <li>Optimized fine-tuning capabilities</li>
+                    </ul>
+                </div>
+                <div class="cons">
+                    <h4>⚠️ Limitations</h4>
+                    <ul>
+                        <li>Requires training data preparation</li>
+                        <li>Initial setup complexity</li>
+                        <li>Computational resources needed</li>
+                        <li>Model maintenance overhead</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="color: #6B46C1; margin: 30px 0 20px 0;">🧠 Model Selection: BERT Multilingual</h3>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Feature</th>
+                    <th>Value</th>
+                    <th>Justification</th>
+                </tr>
+                <tr>
+                    <td><strong>Model</strong></td>
+                    <td>bert-base-multilingual-cased</td>
+                    <td>Supports French, English, Arabic</td>
+                </tr>
+                <tr>
+                    <td><strong>Parameters</strong></td>
+                    <td>110M parameters</td>
+                    <td>Performance/resources balance</td>
+                </tr>
+                <tr>
+                    <td><strong>Languages</strong></td>
+                    <td>104 languages</td>
+                    <td>Covers Tunisian market</td>
+                </tr>
+                <tr>
+                    <td><strong>Max Length</strong></td>
+                    <td>512 tokens</td>
+                    <td>Sufficient for chat and voice messages</td>
+                </tr>
+            </table>
+
+            <div class="metrics-section">
+                <h3 class="metrics-title">📊 Performance Metrics Explained</h3>
+
+                <div class="formula-box">
+                    <h4>🔢 Key Formulas:</h4>
+                    <div class="formula">Precision = TP / (TP + FP)</div>
+                    <p>Proportion of positive predictions that are correct</p>
+
+                    <div class="formula">Recall = TP / (TP + FN)</div>
+                    <p>Proportion of actual positives correctly identified</p>
+
+                    <div class="formula">F1-Score = 2 × (Precision × Recall) / (Precision + Recall)</div>
+                    <p>Harmonic mean of Precision and Recall</p>
+
+                    <div class="formula">Support = Number of actual samples per class</div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">89%</div>
+                        <div class="metric-label">Overall Accuracy</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">0.89</div>
+                        <div class="metric-label">Macro Avg F1-Score</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">0.90</div>
+                        <div class="metric-label">Macro Avg Precision</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">0.89</div>
+                        <div class="metric-label">Macro Avg Recall</div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 style="color: #6B46C1; margin: 20px 0;">🎯 Detected Intent Classes:</h4>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <h4>greeting</h4>
+                    <p>Greetings (Hello, Bonjour, مرحبا)</p>
+                </div>
+                <div class="tech-item">
+                    <h4>enroll</h4>
+                    <p>Enrollment inquiries</p>
+                </div>
+                <div class="tech-item">
+                    <h4>contact</h4>
+                    <p>Contact information requests</p>
+                </div>
+                <div class="tech-item">
+                    <h4>thanks</h4>
+                    <p>Thank you messages</p>
+                </div>
+                <div class="tech-item">
+                    <h4>certifications</h4>
+                    <p>Certification questions</p>
+                </div>
+                <div class="tech-item">
+                    <h4>course_info</h4>
+                    <p>Course information queries</p>
+                </div>
+            </div>
+
+            <h4 style="color: #6B46C1; margin: 20px 0;">📈 Updated Classification Report:</h4>
+            <div class="classification-report">
+                <pre>
+                precision    recall  f1-score   support
+
+certifications       1.00      1.00      1.00        12
+       contact       0.91      0.83      0.87        12
+   course_info       1.00      0.83      0.91        12
+        enroll       0.75      1.00      0.86        12
+      greeting       0.85      0.92      0.88        12
+        thanks       0.90      0.75      0.82        12
+
+      accuracy                           0.89        72
+     macro avg       0.90      0.89      0.89        72
+  weighted avg       0.90      0.89      0.89        72
+                </pre>
+            </div>
+
+            <h4 style="color: #6B46C1; margin: 20px 0;">🎯 Intent Classes Performance Analysis:</h4>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <h4>🏆 Best Performers</h4>
+                    <p><strong>Certifications:</strong> F1=1.00 (Perfect precision & recall)<br>
+                    <strong>Course_info:</strong> F1=0.91 (High precision)<br>
+                    <strong>Greeting:</strong> F1=0.88 (Strong recall)</p>
+                </div>
+                <div class="tech-item">
+                    <h4>⚠️ Needs Improvement</h4>
+                    <p><strong>Enroll:</strong> F1=0.86 (Lower precision: 0.75)<br>
+                    <strong>Contact:</strong> F1=0.87 (Moderate recall: 0.83)<br>
+                    <strong>Thanks:</strong> F1=0.82 (Lower recall: 0.75)</p>
+                </div>
+            </div>
+
+            <div class="code-block">
+# Optimized Training Configuration
+training_args = TrainingArguments(
+    learning_rate=2e-5,              # BERT-optimized learning rate
+    per_device_train_batch_size=32,  # Balanced batch size
+    num_train_epochs=10,             # Prevent overfitting
+    weight_decay=0.01,               # L2 regularization
+    warmup_steps=100,                # Training stability
+    eval_strategy="steps",           # Continuous evaluation
+    save_strategy="steps",           # Checkpoint saving
+    load_best_model_at_end=True      # Load best performing model
+)
+            </div>
+        </div>
+
+        <!-- WORKFLOW DIAGRAM -->
+        <div class="section">
+            <div class="workflow-diagram">
+                <div class="workflow-title">🔄 Chatbot Processing Pipeline (Now with Voice!)</div>
+                <div class="workflow-container">
+                    <div class="workflow-step">
+                        <span class="workflow-step-number">1</span>
+                        <div style="display: inline-block;">
+                            <div class="workflow-step-title">User Input: Voice or Text 🎙️</div>
+                            <div class="workflow-step-desc">Multilingual input (e.g., "Je veux des infos sur Power BI" or audio) received</div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <span class="workflow-step-number">2</span>
+                        <div style="display: inline-block;">
+                            <div class="workflow-step-title">Voice Transcription (if applicable)</div>
+                            <div class="workflow-step-desc">Audio transcribed using Groq Whisper or local speech recognition</div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <span class="workflow-step-number">3</span>
+                        <div style="display: inline-block;">
+                            <div class="workflow-step-title">BERT Classification: "course_info"</div>
+                            <div class="workflow-step-desc">Hugging Face BERT identifies intent with improved 89% accuracy</div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <span class="workflow-step-number">4</span>
+                        <div style="display: inline-block;">
+                            <div class="workflow-step-title">Database Query: PostgreSQL</div>
+                            <div class="workflow-step-desc">System retrieves Power BI course data from formations table</div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <span class="workflow-step-number">5</span>
+                        <div style="display: inline-block;">
+                            <div class="workflow-step-title">Context Preparation for Llama3</div>
+                            <div class="workflow-step-desc">
+                                <strong>Intent:</strong> "course_info"<br>
+                                <strong>Data:</strong> "Power BI, 8 weeks, 700k TND..."<br>
+                                <strong>Context:</strong> Previous conversations
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="workflow-step">
+                        <span class="workflow-step-number">6</span>
+                        <div style="display: inline-block;">
+                            <div class="workflow-step-title">Llama3 Response Generation</div>
+                            <div class="workflow-step-desc">"Power BI is an 8-week course for 700,000 DT..."</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Groq + Llama -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-icon">⚡</div>
+                <div class="section-title">2. Groq + Llama3 - Response Generation</div>
+            </div>
+
+            <h3 style="color: #6B46C1; margin-bottom: 20px;">🚀 Why Groq + Llama3?</h3>
+            <p>Now enhanced with voice transcription via Groq's Whisper API, delivering seamless audio-to-text conversion for a richer user experience! 🎙️</p>
+
+            <table class="comparison-table">
+                <tr>
+                    <th>Criteria</th>
+                    <th>Groq + Llama3</th>
+                    <th>OpenAI GPT</th>
+                    <th>Claude</th>
+                </tr>
+                <tr>
+                    <td><strong>Speed</strong></td>
+                    <td>⚡ Ultra-fast (500+ tokens/s)</td>
+                    <td>🐌 Moderate</td>
+                    <td>🐌 Moderate</td>
+                </tr>
+                <tr>
+                    <td><strong>Cost</strong></td>
+                    <td>💰 Very economical</td>
+                    <td>💸 Expensive</td>
+                    <td>💸 Very expensive</td>
+                </tr>
+                <tr>
+                    <td><strong>Multilingual</strong></td>
+                    <td>✅ Excellent</td>
+                    <td>✅ Good</td>
+                    <td>✅ Good</td>
+                </tr>
+                <tr>
+                    <td><strong>Control</strong></td>
+                    <td>✅ Precise system prompts</td>
+                    <td>⚠️ Less control</td>
+                    <td>⚠️ Moderate</td>
+                </tr>
+                <tr>
+                    <td><strong>Latency</strong></td>
+                    <td>🏆 < 0.5s</td>
+                    <td>⏱️ 2-3s</td>
+                    <td>⏱️ 2-4s</td>
+                </tr>
+                <tr>
+                    <td><strong>Voice Support</strong></td>
+                    <td>🎙️ Native (Whisper API)</td>
+                    <td>⚠️ Limited</td>
+                    <td>⚠️ Limited</td>
+                </tr>
+            </table>
+
+            <h3 style="color: #6B46C1; margin: 30px 0 20px 0;">🎯 Llama3-8B Configuration</h3>
+
+            <div class="pros-cons">
+                <div class="pros">
+                    <h4>✅ Technical Advantages</h4>
+                    <ul>
+                        <li>8B parameters: performance/speed balance</li>
+                        <li>Context window: 8192 tokens</li>
+                        <li>Native multilingual (FR/EN/AR)</li>
+                        <li>Instruction fine-tuned</li>
+                        <li>System prompt support</li>
+                        <li>Hardware optimized (Groq LPU)</li>
+                        <li>Voice transcription via Whisper API</li>
+                    </ul>
+                </div>
+                <div class="pros">
+                    <h4>💼 Business Advantages</h4>
+                    <ul>
+                        <li>Consistent and contextual responses</li>
+                        <li>Strict BI-GEEK domain adherence</li>
+                        <li>Predictable and controlled costs</li>
+                        <li>No quota limitations</li>
+                        <li>Real-time responses</li>
+                        <li>Simple API integration</li>
+                        <li>Enhanced user experience with voice</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="code-block">
+# Groq Production Configuration
+chat_completion = groq_client.chat.completions.create(
+    messages=[
+        {"role": "system", "content": SYSTEM_PROMPTS[lang]},
+        {"role": "user", "content": user_input}
+    ],
+    model="llama3-8b-8192",     # Optimized model
+    temperature=0.3,            # Consistent responses
+    max_tokens=500,             # Length control
+    timeout=120.0,              # Robust timeout
+    max_retries=3               # Reliable retries
+)
+
+# Voice Transcription
+transcription = groq_client.audio.transcriptions.create(
+    file=audio_file,
+    model="whisper-large-v3",
+    response_format="text",
+    language="fr"  # Fallback to French for Tunisia
+)
+            </div>
+        </div>
+    </div>
+</body>
+</html>
